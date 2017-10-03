@@ -26,8 +26,18 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     }
 
     @Override
-    public void onRequestDataStarted() {
+    public void onConnectionEstablished() {
+        Log.d(TAG, "onConnectionEstablished() called");
+    }
 
+    @Override
+    public void onConnectionLost() {
+        Log.d(TAG, "onConnectionLost() called");
+    }
+
+    @Override
+    public void onRequestDataStarted() {
+        Log.d(TAG, "onRequestDataStarted() called");
     }
 
     @Override
@@ -51,5 +61,15 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     @Override
     public void onRequestDataFailure() {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

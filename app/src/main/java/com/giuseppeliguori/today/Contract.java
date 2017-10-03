@@ -12,12 +12,18 @@ import java.util.List;
 
 public interface Contract {
     interface View {
+        void onConnectionEstablished();
+        void onConnectionLost();
+
         void onRequestDataStarted();
         void onRequestDataSuccess();
         void onRequestDataFailure();
     }
 
     interface Presenter {
+        void onResume();
+        void onStop();
+
         void requestData();
         List<Event> requestEvents();
         List<Birth> requestBirths();
