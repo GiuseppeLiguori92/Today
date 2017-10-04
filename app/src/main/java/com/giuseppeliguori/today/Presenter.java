@@ -30,7 +30,6 @@ public class Presenter implements Contract.Presenter, OnNetworkChangedListener {
         context = ((Activity)view).getApplicationContext();
 
         todayApi = new TodayAPI(context);
-        todayApi.registerNetworkBroadcast(this);
     }
 
     @Override
