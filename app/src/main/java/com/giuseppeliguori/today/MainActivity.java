@@ -31,9 +31,11 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this); snackbar = Snackbar.make(mainLayout, "", 0);
+        ButterKnife.bind(this);
+        snackbar = Snackbar.make(mainLayout, "", 0);
 
         presenter = new Presenter(this);
 
@@ -52,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     private void showNoConnectionSnackbar() {
         snackbar.setText(R.string.connection_established);
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.colorSnackbarSuccess));
-        snackbar.setDuration(Snackbar.LENGTH_SHORT); snackbar.setAction("", null); snackbar.show();
+        snackbar.setDuration(Snackbar.LENGTH_SHORT);
+        snackbar.setAction("", null); snackbar.show();
     }
 
     @Override
@@ -62,11 +65,11 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         snackbar.setDuration(Snackbar.LENGTH_INDEFINITE);
         snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.colorSnackbarErrorActionText));
         snackbar.setAction(getString(R.string.settings).toUpperCase(), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
-                    }
-                }); snackbar.show();
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+            }
+        }); snackbar.show();
     }
 
     @Override
