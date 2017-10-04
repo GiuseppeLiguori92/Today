@@ -79,7 +79,9 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     @Override
     public void onRequestDataSuccess() {
-        List<Event> events = presenter.requestEvents(); List<Birth> births = presenter.requestBirths(); List<Death> deaths = presenter.requestDeaths();
+        List<Event> events = presenter.requestEvents();
+        List<Birth> births = presenter.requestBirths();
+        List<Death> deaths = presenter.requestDeaths();
 
         for (int i = 0; i < events.size(); i++) {
             Log.d(TAG, "onRequestDataSuccess: " + events.get(i).getText());
@@ -100,11 +102,13 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     @Override
     protected void onResume() {
-        super.onResume(); presenter.onResume();
+        super.onResume();
+        presenter.onResume();
     }
 
     @Override
     protected void onStop() {
-        super.onStop(); presenter.onStop();
+        super.onStop();
+        presenter.onStop();
     }
 }
