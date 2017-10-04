@@ -128,7 +128,6 @@ public class TodayAPI {
 
     public interface TodayCallback {
         void onResponse();
-
         void onFailure(Failure reason);
     }
 }

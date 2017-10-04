@@ -24,25 +24,13 @@ public class Presenter implements Contract.Presenter, OnNetworkChangedListener {
 
     private TodayAPI todayApi;
     private boolean responseReceived = false;
-    private OnNetworkChangedListener onNetworkChangedListener;
 
     public Presenter(final Contract.View view) {
         this.view = view;
         context = ((Activity)view).getApplicationContext();
 
-        onNetworkChangedListener = new OnNetworkChangedListener() {
-            @Override
-            public void onNetworkChanged(boolean isConnected) {
-                if (isConnected) {
-                    view.onConnectionEstablished();
-                } else {
-                    view.onConnectionLost();
-                }
-            }
-        };
-
         todayApi = new TodayAPI(context);
-        todayApi.registerNetworkBroadcast(onNetworkChangedListener);
+        todayApi.registerNetworkBroadcast(this);
     }
 
     @Override
@@ -86,16 +74,20 @@ public class Presenter implements Contract.Presenter, OnNetworkChangedListener {
 
     @Override
     public void onResume() {
-        todayApi.registerNetworkBroadcast(onNetworkChangedListener);
+        todayApi.registerNetworkBroadcast(this);
     }
 
     @Override
     public void onStop() {
-        todayApi.unregisterNetworkBroadcast(onNetworkChangedListener);
+        todayApi.unregisterNetworkBroadcast(this);
     }
 
     @Override
     public void onNetworkChanged(boolean isConnected) {
-
+        if (isConnected) {
+            view.onConnectionEstablished();
+        } else {
+            view.onConnectionLost();
+        }
     }
 }
