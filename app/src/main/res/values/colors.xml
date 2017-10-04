@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!--MainActivity-->
+    <color name="colorSnackbarSuccess">@color/colorPrimary</color>
+    <color name="colorSnackbarError">#ff4848</color>
+    <color name="colorSnackbarErrorActionText">#ffffff</color>
+
+
 </resources>

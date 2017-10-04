@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Today</string>
+
+    <string name="connection_established">Connection established</string>
+    <string name="connection_lost">No network connection</string>
+    <string name="settings">Settings</string>
 </resources>
