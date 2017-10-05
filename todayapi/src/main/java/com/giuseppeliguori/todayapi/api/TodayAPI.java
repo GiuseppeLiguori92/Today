@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import com.giuseppeliguori.todayapi.apiclass.Birth;
 import com.giuseppeliguori.todayapi.apiclass.Death;
@@ -58,9 +59,10 @@ public class TodayAPI {
         handleCall(todayCallback, null);
     }
 
-    private void handleCall(final TodayCallback todayCallback, Date date) {
-        if (NetworkManager.getInstance().isConnected(context)) {
-            getCall(date).enqueue(new Callback<Header>() {
+    @VisibleForTesting
+    void handleCall(final TodayCallback todayCallback, Date date) {
+        if (isConnected()) {
+            getCall(muffinlabsAPI, date).enqueue(new Callback<Header>() {
                 @Override
                 public void onResponse(Call<Header> call, Response<Header> response) {
                     if (response.isSuccessful()) {
@@ -82,12 +84,16 @@ public class TodayAPI {
         }
     }
 
+    @VisibleForTesting
+    boolean isConnected() {return NetworkManager.getInstance().isConnected(context);}
+
     public enum Failure {
         NO_NETWORK,
         UNKNOWN
     }
 
-    private Call<Header> getCall(@Nullable Date date) {
+    @VisibleForTesting
+    Call<Header> getCall(MuffinlabsAPI muffinlabsAPI, @Nullable Date date) {
         if (date != null) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
