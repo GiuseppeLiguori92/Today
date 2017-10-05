@@ -9,13 +9,10 @@ import com.giuseppeliguori.todayapi.apiclass.Death;
 import com.giuseppeliguori.todayapi.apiclass.Event;
 import com.giuseppeliguori.todayapi.interfaces.OnNetworkChangedListener;
 
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by giuseppeliguori on 10/3/17.
@@ -23,6 +20,7 @@ import java.util.Locale;
 
 public class Presenter implements Contract.Presenter, OnNetworkChangedListener {
     private static final String TAG = "Presenter";
+
 
     private Contract.View view;
     private Context context;
@@ -77,8 +75,7 @@ public class Presenter implements Contract.Presenter, OnNetworkChangedListener {
     }
 
     @Override
-    public void requestDate() {
-        Date date = new Date();
+    public void requestDate(Date date) {
         SimpleDateFormat monthDayFormat = new SimpleDateFormat("MMMM d");
         SimpleDateFormat dayYearFormat = new SimpleDateFormat("EEEE, YYYY");
         view.setDateView(monthDayFormat.format(date), dayYearFormat.format(date));

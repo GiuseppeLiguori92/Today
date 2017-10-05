@@ -14,6 +14,7 @@ import com.giuseppeliguori.todayapi.apiclass.Birth;
 import com.giuseppeliguori.todayapi.apiclass.Death;
 import com.giuseppeliguori.todayapi.apiclass.Event;
 
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
         presenter = new Presenter(this);
 
-        presenter.requestDate();
+        presenter.requestDate(new Date());
         presenter.requestData();
     }
 
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     @Override
     public void setDateView(String dateMonthDay, String dateDayYear) {
+        Log.d(TAG, "setDateView() called with: dateMonthDay = [" + dateMonthDay + "], dateDayYear = [" + dateDayYear + "]");
         textViewDateMonthDay.setText(dateMonthDay);
         textViewDateDayYear.setText(dateDayYear);
     }

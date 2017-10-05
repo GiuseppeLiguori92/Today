@@ -4,6 +4,7 @@ import com.giuseppeliguori.todayapi.apiclass.Birth;
 import com.giuseppeliguori.todayapi.apiclass.Death;
 import com.giuseppeliguori.todayapi.apiclass.Event;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +32,6 @@ public interface Contract {
         List<Birth> requestBirths();
         List<Death> requestDeaths();
 
-        void requestDate();
+        void requestDate(Date date);
     }
 }

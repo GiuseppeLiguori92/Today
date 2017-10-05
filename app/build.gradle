@@ -23,6 +23,10 @@ ext {
     butterKnife="8.8.1"
 }
 
+repositories {
+    jcenter()
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -32,6 +36,10 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile project(':todayapi')
+
+//  Mockito
+    androidTestCompile "org.mockito:mockito-core:2.8.47"
+    androidTestCompile 'com.linkedin.dexmaker:dexmaker-mockito:2.2.0'
 
 //  Design
     compile 'com.android.support:design:26.+'
