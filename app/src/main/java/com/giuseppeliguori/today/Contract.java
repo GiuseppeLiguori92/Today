@@ -18,6 +18,8 @@ public interface Contract {
         void onRequestDataStarted();
         void onRequestDataSuccess();
         void onRequestDataFailure();
+
+        void setDateView(String dateMonthDay, String dateDayYear);
     }
 
     interface Presenter {
@@ -28,5 +30,7 @@ public interface Contract {
         List<Event> requestEvents();
         List<Birth> requestBirths();
         List<Death> requestDeaths();
+
+        void requestDate();
     }
 }

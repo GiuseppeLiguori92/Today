@@ -3,14 +3,19 @@ package com.giuseppeliguori.today;
 import android.app.Activity;
 import android.content.Context;
 
-import com.giuseppeliguori.todayapi.interfaces.OnNetworkChangedListener;
+import com.giuseppeliguori.todayapi.api.TodayAPI;
 import com.giuseppeliguori.todayapi.apiclass.Birth;
 import com.giuseppeliguori.todayapi.apiclass.Death;
 import com.giuseppeliguori.todayapi.apiclass.Event;
-import com.giuseppeliguori.todayapi.api.TodayAPI;
+import com.giuseppeliguori.todayapi.interfaces.OnNetworkChangedListener;
 
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by giuseppeliguori on 10/3/17.
@@ -69,6 +74,14 @@ public class Presenter implements Contract.Presenter, OnNetworkChangedListener {
     @Override
     public List<Death> requestDeaths() {
         return responseReceived ? todayApi.getDeath() : new ArrayList<Death>();
+    }
+
+    @Override
+    public void requestDate() {
+        Date date = new Date();
+        SimpleDateFormat monthDayFormat = new SimpleDateFormat("MMMM d");
+        SimpleDateFormat dayYearFormat = new SimpleDateFormat("EEEE, YYYY");
+        view.setDateView(monthDayFormat.format(date), dayYearFormat.format(date));
     }
 
     @Override

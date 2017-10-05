@@ -2,13 +2,13 @@ package com.giuseppeliguori.today;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BaseTransientBottomBar;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.giuseppeliguori.todayapi.apiclass.Birth;
 import com.giuseppeliguori.todayapi.apiclass.Death;
@@ -24,8 +24,10 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     private Presenter presenter;
 
-    @BindView(R.id.main_layout)
-    LinearLayout mainLayout;
+    @BindView(R.id.main_layout) ConstraintLayout mainLayout;
+
+    @BindView(R.id.textView_dateMonthDay) TextView textViewDateMonthDay;
+    @BindView(R.id.textView_dateDayYear) TextView textViewDateDayYear;
 
     private Snackbar snackbar;
 
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
         presenter = new Presenter(this);
 
+        presenter.requestDate();
         presenter.requestData();
     }
 
@@ -98,6 +101,12 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     @Override
     public void onRequestDataFailure() {
+    }
+
+    @Override
+    public void setDateView(String dateMonthDay, String dateDayYear) {
+        textViewDateMonthDay.setText(dateMonthDay);
+        textViewDateDayYear.setText(dateDayYear);
     }
 
     @Override
