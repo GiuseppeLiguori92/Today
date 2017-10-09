@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     @Override
     public void setDateView(String dateMonthDay, String dateDayYear) {
-        Log.d(TAG, "setDateView() called with: dateMonthDay = [" + dateMonthDay + "], dateDayYear = [" + dateDayYear + "]");
         textViewDateMonthDay.setText(dateMonthDay);
         textViewDateDayYear.setText(dateDayYear);
     }
