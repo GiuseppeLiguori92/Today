@@ -3,13 +3,15 @@ package com.giuseppeliguori.today;
 import android.app.Activity;
 import android.content.Context;
 
-import com.giuseppeliguori.todayapi.interfaces.OnNetworkChangedListener;
+import com.giuseppeliguori.todayapi.api.TodayAPI;
 import com.giuseppeliguori.todayapi.apiclass.Birth;
 import com.giuseppeliguori.todayapi.apiclass.Death;
 import com.giuseppeliguori.todayapi.apiclass.Event;
-import com.giuseppeliguori.todayapi.api.TodayAPI;
+import com.giuseppeliguori.todayapi.interfaces.OnNetworkChangedListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,6 +20,7 @@ import java.util.List;
 
 public class Presenter implements Contract.Presenter, OnNetworkChangedListener {
     private static final String TAG = "Presenter";
+
 
     private Contract.View view;
     private Context context;
@@ -69,6 +72,13 @@ public class Presenter implements Contract.Presenter, OnNetworkChangedListener {
     @Override
     public List<Death> requestDeaths() {
         return responseReceived ? todayApi.getDeath() : new ArrayList<Death>();
+    }
+
+    @Override
+    public void requestDate(Date date) {
+        SimpleDateFormat monthDayFormat = new SimpleDateFormat("MMMM d");
+        SimpleDateFormat dayYearFormat = new SimpleDateFormat("EEEE, YYYY");
+        view.setDateView(monthDayFormat.format(date), dayYearFormat.format(date));
     }
 
     @Override

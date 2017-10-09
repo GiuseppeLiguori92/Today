@@ -4,6 +4,7 @@ import com.giuseppeliguori.todayapi.apiclass.Birth;
 import com.giuseppeliguori.todayapi.apiclass.Death;
 import com.giuseppeliguori.todayapi.apiclass.Event;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,6 +19,8 @@ public interface Contract {
         void onRequestDataStarted();
         void onRequestDataSuccess();
         void onRequestDataFailure();
+
+        void setDateView(String dateMonthDay, String dateDayYear);
     }
 
     interface Presenter {
@@ -28,5 +31,7 @@ public interface Contract {
         List<Event> requestEvents();
         List<Birth> requestBirths();
         List<Death> requestDeaths();
+
+        void requestDate(Date date);
     }
 }
