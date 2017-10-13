@@ -28,9 +28,6 @@ public interface Contract {
         void onStop();
 
         void requestData();
-        List<Event> requestEvents();
-        List<Birth> requestBirths();
-        List<Death> requestDeaths();
 
         void requestDate(Date date);
     }

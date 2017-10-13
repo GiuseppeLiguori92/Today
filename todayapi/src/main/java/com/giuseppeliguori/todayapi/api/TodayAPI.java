@@ -3,10 +3,12 @@ package com.giuseppeliguori.todayapi.api;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
 import com.giuseppeliguori.todayapi.apiclass.Birth;
+import com.giuseppeliguori.todayapi.apiclass.Data;
 import com.giuseppeliguori.todayapi.apiclass.Death;
 import com.giuseppeliguori.todayapi.apiclass.Event;
 import com.giuseppeliguori.todayapi.apiclass.Header;
@@ -62,26 +64,32 @@ public class TodayAPI {
     @VisibleForTesting
     void handleCall(final TodayCallback todayCallback, Date date) {
         if (isConnected()) {
-            getCall(muffinlabsAPI, date).enqueue(new Callback<Header>() {
-                @Override
-                public void onResponse(Call<Header> call, Response<Header> response) {
-                    if (response.isSuccessful()) {
-                        header = response.body();
-                        todayCallback.onResponse();
-                    } else {
-                        todayCallback.onFailure(Failure.UNKNOWN);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Header> call, Throwable t) {
-                    t.printStackTrace();
-                    todayCallback.onFailure(Failure.UNKNOWN);
-                }
-            });
+            getCall(muffinlabsAPI, date).enqueue(getCallback(todayCallback));
         } else {
             todayCallback.onFailure(Failure.NO_NETWORK);
         }
+    }
+
+    @VisibleForTesting
+    @NonNull
+    Callback<Header> getCallback(final TodayCallback todayCallback) {
+        return new Callback<Header>() {
+            @Override
+            public void onResponse(Call<Header> call, Response<Header> response) {
+                if (response.isSuccessful()) {
+                    header = response.body();
+                    todayCallback.onResponse();
+                } else {
+                    todayCallback.onFailure(Failure.UNKNOWN);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Header> call, Throwable t) {
+                t.printStackTrace();
+                todayCallback.onFailure(Failure.UNKNOWN);
+            }
+        };
     }
 
     @VisibleForTesting
@@ -113,6 +121,10 @@ public class TodayAPI {
 
     public List<Death> getDeath() {
         return header == null ? null : header.getData().getDeaths();
+    }
+
+    public Data getData() {
+        return header == null ? null : header.getData();
     }
 
     public void registerNetworkBroadcast(OnNetworkChangedListener onNetworkChangedListener) {

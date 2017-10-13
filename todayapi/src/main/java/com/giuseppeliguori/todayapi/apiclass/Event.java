@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Event {
+public class Event implements Yearable, Textable {
 
     @SerializedName("year")
     @Expose
@@ -20,6 +20,7 @@ public class Event {
     @Expose
     private List<EventLink> links = null;
 
+    @Override
     public String getYear() {
         return year;
     }
@@ -36,6 +37,7 @@ public class Event {
         this.html = html;
     }
 
+    @Override
     public String getText() {
         return text;
     }

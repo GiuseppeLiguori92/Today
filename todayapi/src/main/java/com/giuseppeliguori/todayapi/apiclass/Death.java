@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Death {
+public class Death implements Yearable, Textable {
 
     @SerializedName("year")
     @Expose
@@ -17,6 +17,7 @@ public class Death {
     @Expose
     private List<DeathLink> links = null;
 
+    @Override
     public String getYear() {
         return year;
     }
@@ -25,6 +26,7 @@ public class Death {
         this.year = year;
     }
 
+    @Override
     public String getText() {
         return text;
     }

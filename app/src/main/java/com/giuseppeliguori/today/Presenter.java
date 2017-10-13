@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.giuseppeliguori.todayapi.api.TodayAPI;
 import com.giuseppeliguori.todayapi.apiclass.Birth;
+import com.giuseppeliguori.todayapi.apiclass.Data;
 import com.giuseppeliguori.todayapi.apiclass.Death;
 import com.giuseppeliguori.todayapi.apiclass.Event;
 import com.giuseppeliguori.todayapi.interfaces.OnNetworkChangedListener;
@@ -27,6 +28,8 @@ public class Presenter implements Contract.Presenter, OnNetworkChangedListener {
 
     private TodayAPI todayApi;
     private boolean responseReceived = false;
+
+    boolean isConnected = true;
 
     public Presenter(final Contract.View view) {
         this.view = view;
@@ -59,25 +62,24 @@ public class Presenter implements Contract.Presenter, OnNetworkChangedListener {
         });
     }
 
-    @Override
-    public List<Event> requestEvents() {
+    private List<Event> requestEvents() {
         return responseReceived ? todayApi.getEvents() : new ArrayList<Event>();
     }
 
-    @Override
-    public List<Birth> requestBirths() {
+    private List<Birth> requestBirths() {
         return responseReceived ? todayApi.getBirths() : new ArrayList<Birth>();
     }
 
-    @Override
-    public List<Death> requestDeaths() {
+    private List<Death> requestDeaths() {
         return responseReceived ? todayApi.getDeath() : new ArrayList<Death>();
     }
+
+    public Data getData() { return responseReceived ? todayApi.getData() : null; }
 
     @Override
     public void requestDate(Date date) {
         SimpleDateFormat monthDayFormat = new SimpleDateFormat("MMMM d");
-        SimpleDateFormat dayYearFormat = new SimpleDateFormat("EEEE, YYYY");
+        SimpleDateFormat dayYearFormat = new SimpleDateFormat("EEEE, yyyy");
         view.setDateView(monthDayFormat.format(date), dayYearFormat.format(date));
     }
 
@@ -93,10 +95,13 @@ public class Presenter implements Contract.Presenter, OnNetworkChangedListener {
 
     @Override
     public void onNetworkChanged(boolean isConnected) {
-        if (isConnected) {
-            view.onConnectionEstablished();
-        } else {
-            view.onConnectionLost();
+        if (this.isConnected != isConnected || !isConnected) {
+            this.isConnected = isConnected;
+            if (isConnected) {
+                view.onConnectionEstablished();
+            } else {
+                view.onConnectionLost();
+            }
         }
     }
 }

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#26C6DA</color>
+    <color name="colorPrimaryDark">#00BCD4</color>
+    <color name="colorAccent">#8BC34A</color>
 
     <!--MainActivity-->
     <color name="colorSnackbarSuccess">@color/colorPrimary</color>
     <color name="colorSnackbarError">#ff4848</color>
     <color name="colorSnackbarErrorActionText">#ffffff</color>
 
+    <color name="menuNormal">@color/colorAccent</color>
+    <color name="menuPressed">#a8de6a</color>
+    <color name="menuRipple">#AAFFFFFF</color>
 
 </resources>

@@ -1,19 +1,23 @@
 package com.giuseppeliguori.today;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.giuseppeliguori.todayapi.apiclass.Birth;
-import com.giuseppeliguori.todayapi.apiclass.Death;
-import com.giuseppeliguori.todayapi.apiclass.Event;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +34,15 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     @BindView(R.id.textView_dateMonthDay) TextView textViewDateMonthDay;
     @BindView(R.id.textView_dateDayYear) TextView textViewDateDayYear;
 
+    @BindView(R.id.layout_noItems) LinearLayout layoutNoItems;
+
+    @BindView(R.id.recycleView) RecyclerView recyclerView;
+    private RecyclerView.LayoutManager recycleViewLayoutManager;
+
     private Snackbar snackbar;
+
+    private Menu menu;
+    private String dateMonthDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+        recycleViewLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(recycleViewLayoutManager);
         snackbar = Snackbar.make(mainLayout, "", 0);
 
         presenter = new Presenter(this);
@@ -78,36 +92,47 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     @Override
     public void onRequestDataStarted() {
-        Log.d(TAG, "onRequestDataStarted() called");
+        recyclerView.setVisibility(View.GONE);
+        layoutNoItems.setVisibility(View.GONE);
     }
 
     @Override
     public void onRequestDataSuccess() {
-        List<Event> events = presenter.requestEvents();
-        List<Birth> births = presenter.requestBirths();
-        List<Death> deaths = presenter.requestDeaths();
-
-        for (int i = 0; i < events.size(); i++) {
-            Log.d(TAG, "onRequestDataSuccess: " + events.get(i).getText());
-        }
-
-        for (int i = 0; i < births.size(); i++) {
-            Log.d(TAG, "onRequestDataSuccess: " + births.get(i).getText());
-        }
-
-        for (int i = 0; i < deaths.size(); i++) {
-            Log.d(TAG, "onRequestDataSuccess: " + deaths.get(i).getText());
-        }
+        recyclerView.setVisibility(View.VISIBLE);
+        RecycleViewPresenter recycleViewPresenter = new RecycleViewPresenter(presenter.getData());
+        RecycleViewAdapter mAdapter = new RecycleViewAdapter(recycleViewPresenter);
+        recyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public void onRequestDataFailure() {
+        layoutNoItems.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void setDateView(String dateMonthDay, String dateDayYear) {
-        textViewDateMonthDay.setText(dateMonthDay);
-        textViewDateDayYear.setText(dateDayYear);
+        this.dateMonthDay = dateMonthDay.substring(0, 1).toUpperCase() + dateMonthDay.substring(1);
+        textViewDateMonthDay.setText(this.dateMonthDay);
+        textViewDateDayYear.setText(dateDayYear.substring(0, 1).toUpperCase() + dateDayYear.substring(1));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        this.menu = menu;
+        if (menu != null) {
+            menu.getItem(0).setTitle(new String(Character.toChars(0x1F4C5)));
+        }
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.date:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

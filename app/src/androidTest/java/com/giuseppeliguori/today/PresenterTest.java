@@ -4,9 +4,16 @@ import static junit.framework.Assert.assertEquals;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import android.content.Context;
+import android.test.mock.MockContext;
+
+import com.giuseppeliguori.todayapi.api.TodayAPI;
 
 import org.junit.After;
 import org.junit.Before;
@@ -59,5 +66,11 @@ public class PresenterTest {
         assertEquals("October 5", captorMonthDay.getValue());
         assertEquals("Thursday, 2017", captorDayYear.getValue());
     }
+
+    @Test
+    public void requestData() {
+
+    }
+
 
 }
