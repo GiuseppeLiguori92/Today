@@ -1,5 +1,6 @@
 package com.giuseppeliguori.today;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     private Menu menu;
     private String dateMonthDay;
 
+    @BindView(R.id.calendarView) CalendarView calendarView;
+    private int calendarHeight = 0;
+    private boolean isCalendarVisible = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +60,16 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         recycleViewLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(recycleViewLayoutManager);
         snackbar = Snackbar.make(mainLayout, "", 0);
+
+        calendarHeight = calendarView.getHeight();
+        calendarView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                calendarView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                calendarHeight = calendarView.getHeight();
+                calendarView.setY(-calendarHeight);
+            }
+        });
 
         presenter = new Presenter(this);
 
@@ -129,6 +146,17 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.date:
+
+                ValueAnimator valueAnimator = ValueAnimator.ofFloat(isCalendarVisible ? -calendarHeight, 3f);
+                int mDuration = 3000; //in millis
+                valueAnimator.setDuration(mDuration);
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        view.setTranslationX((float)animation.getAnimatedValue());
+                    }
+                });
+                valueAnimator.setRepeatCount(5);
+                valueAnimator.start();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
