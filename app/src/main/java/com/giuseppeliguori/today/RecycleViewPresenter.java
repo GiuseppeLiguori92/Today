@@ -1,5 +1,7 @@
 package com.giuseppeliguori.today;
 
+import android.util.Log;
+
 import com.giuseppeliguori.todayapi.apiclass.Birth;
 import com.giuseppeliguori.todayapi.apiclass.Data;
 import com.giuseppeliguori.todayapi.apiclass.Death;
@@ -17,13 +19,20 @@ import java.util.List;
 
 public class RecycleViewPresenter implements RecycleViewContract.Presenter {
 
+    private static final String TAG = "RecycleViewPresenter";
+
     private Data data;
     private List<Birth> births = new ArrayList<>();
     private List<Death> deaths = new ArrayList<>();
     private List<Event> events = new ArrayList<>();
     private List<Object> datas = new ArrayList<>();
 
-    public RecycleViewPresenter(Data data) {
+    public enum Order {
+        ASC,
+        DESC
+    }
+
+    public RecycleViewPresenter(Data data, Order order) {
         this.data = data;
         births = data.getBirths();
         deaths = data.getDeaths();
@@ -33,18 +42,25 @@ public class RecycleViewPresenter implements RecycleViewContract.Presenter {
         addListToList(deaths, datas);
         addListToList(events, datas);
 
-        sortList();
+        sortList(order);
     }
 
-    private void sortList() {
+    private void sortList(Order order) {
         Collections.sort(datas, new Comparator<Object>() {
             @Override
             public int compare(Object yearable1, Object yearable2) {
-                Integer year1 = Integer.parseInt(((Yearable)yearable1).getYear());
-                Integer year2 = Integer.parseInt(((Yearable)yearable2).getYear());
+                Integer year1 = Integer.parseInt(clearYear(((Yearable) order ? yearable1 : yearable2).getYear()));
+                Integer year2 = Integer.parseInt(clearYear(((Yearable) order ? yearable2 : yearable1).getYear()));
                 return Integer.valueOf(year2.compareTo(year1));
             }
         });
+    }
+
+    private String clearYear(String year) {
+        if (year.contains("BC")) {
+            return year.split(" ")[0];
+        }
+        return year;
     }
 
     private void addListToList(List<?> listToAdd, List<Object> listResult) {

@@ -83,6 +83,23 @@ public class Presenter implements Contract.Presenter, OnNetworkChangedListener {
         view.setDateView(monthDayFormat.format(date), dayYearFormat.format(date));
     }
 
+    private boolean isCalendarVisible = false;
+    @Override
+    public void onClickDateMenuItem() {
+        if (!isCalendarVisible) {
+            view.showCalendarWithAnimation();
+        } else {
+            view.hideCalendarWithAnimation();
+        }
+
+        isCalendarVisible = !isCalendarVisible;
+    }
+
+    @Override
+    public void reverseOrderList() {
+
+    }
+
     @Override
     public void onResume() {
         todayApi.registerNetworkBroadcast(this);

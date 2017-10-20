@@ -21,6 +21,10 @@ public interface Contract {
         void onRequestDataFailure();
 
         void setDateView(String dateMonthDay, String dateDayYear);
+
+        void hideCalendarWithAnimation();
+
+        void showCalendarWithAnimation();
     }
 
     interface Presenter {
@@ -30,5 +34,9 @@ public interface Contract {
         void requestData();
 
         void requestDate(Date date);
+
+        void onClickDateMenuItem();
+
+        void reverseOrderList();
     }
 }

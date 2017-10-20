@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
+import android.support.transition.Visibility;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements Contract.View {
     private static final String TAG = "MainActivity";
+    public static final int CALENDAR_ANIMATION_DURATION_MS = 200;
 
     private Presenter presenter;
 
@@ -49,7 +51,8 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     @BindView(R.id.calendarView) CalendarView calendarView;
     private int calendarHeight = 0;
-    private boolean isCalendarVisible = false;
+    private ValueAnimator valueAnimatorCalendarView;
+    private RecycleViewPresenter recycleViewPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,9 +119,13 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     @Override
     public void onRequestDataSuccess() {
         recyclerView.setVisibility(View.VISIBLE);
-        RecycleViewPresenter recycleViewPresenter = new RecycleViewPresenter(presenter.getData());
-        RecycleViewAdapter mAdapter = new RecycleViewAdapter(recycleViewPresenter);
-        recyclerView.setAdapter(mAdapter);
+        if (recycleViewPresenter == null) {
+            recycleViewPresenter = new RecycleViewPresenter(presenter.getData());
+            RecycleViewAdapter mAdapter = new RecycleViewAdapter(recycleViewPresenter);
+            recyclerView.setAdapter(mAdapter);
+        } else {
+
+        }
     }
 
     @Override
@@ -134,11 +141,37 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     }
 
     @Override
+    public void hideCalendarWithAnimation() {
+        animateCalendar(false);
+    }
+
+    @Override
+    public void showCalendarWithAnimation() {
+        animateCalendar(true);
+    }
+
+    private void animateCalendar(boolean show) {
+        if (valueAnimatorCalendarView != null &&
+                valueAnimatorCalendarView.isRunning()) {
+            valueAnimatorCalendarView.cancel();
+        }
+        valueAnimatorCalendarView = ValueAnimator.ofFloat(calendarView.getY(), !show ? calendarView.getY()-calendarHeight : 0);
+        valueAnimatorCalendarView.setDuration(CALENDAR_ANIMATION_DURATION_MS);
+        valueAnimatorCalendarView.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                calendarView.setY((float)animation.getAnimatedValue());
+            }
+        });
+        valueAnimatorCalendarView.start();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         this.menu = menu;
         if (menu != null) {
-            menu.getItem(0).setTitle(new String(Character.toChars(0x1F4C5)));
+            menu.getItem(1).setTitle(new String(Character.toChars(0x1F4C5)));
+            menu.getItem(0).setTitle(new String(Character.toChars(0x23F0)));
         }
         return true;
     }
@@ -146,17 +179,10 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.date:
-
-                ValueAnimator valueAnimator = ValueAnimator.ofFloat(isCalendarVisible ? -calendarHeight, 3f);
-                int mDuration = 3000; //in millis
-                valueAnimator.setDuration(mDuration);
-                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        view.setTranslationX((float)animation.getAnimatedValue());
-                    }
-                });
-                valueAnimator.setRepeatCount(5);
-                valueAnimator.start();
+                presenter.onClickDateMenuItem();
+                return true;
+            case R.id.order:
+                recycleViewPresenter.
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

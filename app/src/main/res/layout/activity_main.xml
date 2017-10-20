@@ -92,8 +92,14 @@
 
     <CalendarView
         android:id="@+id/calendarView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
 
 </android.support.constraint.ConstraintLayout>
